@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id 'maven-publish'
 }
 
 android {
@@ -33,6 +34,33 @@ android {
 
     buildFeatures {
         compose true
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId = 'com.towertex.bloom'
+            artifactId = 'sdkcompose'
+            version = '0.0.2'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/mapareus/TowertexBloomAndroid")
+            credentials {
+                username = properties.getProperty('gpr.user') ?: System.getenv("USERNAME")
+                password = properties.getProperty('gpr.key') ?: System.getenv("TOKEN")
+            }
+        }
     }
 }
 
