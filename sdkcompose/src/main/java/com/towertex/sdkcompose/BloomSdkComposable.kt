@@ -68,14 +68,14 @@ object BloomSdkComposable {
             if (sdk != null) return@LaunchedEffect
             sdk = BloomSdkBuilder(
                 context = aContext,
-                configuration = BloomSdkBuilder.defaultConfiguration
+                configuration = configuration
             ).build()
             uiConfiguration = sdk?.getUIConfigurationForm(this, 1)?.first()
         }
 
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize()
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
