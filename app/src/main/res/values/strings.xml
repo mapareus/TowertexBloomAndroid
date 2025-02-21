@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TowertexBloom</string>
+    <string name="hello_message">Hello %s!</string>
+</resources>

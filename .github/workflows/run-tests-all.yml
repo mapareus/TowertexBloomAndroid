@@ -1,0 +1,41 @@
+name: Run All Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run unit tests on sdk module
+        run: ./gradlew testDebugUnitTest --project-dir sdk
+
+      - name: Upload test results from sdk module
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-sdk
+          path: sdk/build/test-results/testDebugUnitTest
+
+      - name: Publish test results from sdk module
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: sdk/build/test-results/testDebugUnitTest/*.xml
+          check_name: Unit Test Results of sdk module
+          comment_title: Unit Test Results of sdk module
+          update_comment: true
